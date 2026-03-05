@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragonball API Explorer</title>
+    <link rel="stylesheet" href="/src/styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dragon Ball API Explorer</h1>
+            <p>Busca personajes, planetas y transformaciones</p>
+        </header>
+        
+        <main>
+            <!-- Barra de búsqueda - Será generada por SearchBar -->
+            <div class="search-section">
+                <!-- SearchBar se insertará aquí -->
+            </div>
+            
+            <!-- Área de resultados -->
+            <div id="results" class="results-grid">
+                <!-- Los resultados se renderizarán aquí -->
+            </div>
+            
+            <!-- Mensaje de error -->
+            <div id="errorMessage" class="error-message"></div>
+        </main>
+    </div>
+    
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
