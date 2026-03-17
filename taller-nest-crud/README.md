@@ -29,12 +29,3 @@ Luego abre `http://localhost:3000`.
 | PUT | `/instruments/:id` | Actualizar instrumento |
 | DELETE | `/instruments/:id` | Eliminar instrumento |
 
-### Ejemplo de body para POST
-```json
-{
-  "name": "Guitarra Stratocaster",
-  "type": "guitarra",
-  "brand": "Fender"
-}
-
-```
