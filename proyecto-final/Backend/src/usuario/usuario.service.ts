@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { UsuarioDTO } from './dtos/usuario.dto';
 import * as bcrypt from 'bcrypt';
 import { Roles } from './enums/roles.enums';
-import { LoginUsuarioDTO } from './dtos/loginUsuario.dto';
+import { LoginUsuarioDTO } from '../auth/dtos/loginUsuario.dto';
 import { isEmpty, isUUID } from 'class-validator';
 import { UpdateUsuarioDTO } from './dtos/update.usuario.dto';
 
@@ -35,18 +35,6 @@ export class UsuarioService {
         }catch(error){
             this.handlerErrors(error);
         }
-    }
-
-    async loginUsuario(loginUsuarioDto: LoginUsuarioDTO){
-        const {correo, contrasenia} = loginUsuarioDto;
-
-        const usuarioEncontrado = await this.findUsuario(correo);
-
-        if(bcrypt.compareSync(contrasenia, usuarioEncontrado.contrasenia)){
-            return 'Acceso concedido';
-        }
-        return 'Acceso denegado';
-
     }
 
     async findUsuario(term: string) {

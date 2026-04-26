@@ -90,7 +90,6 @@ export class VeterinarioService {
         }
         try{
             const usuarioId = veterinario.usuario.id;
-            console.log(usuarioId);
             await this.veterinarioRepository.delete(id);
             await this.usuarioService.eliminarUsuario(usuarioId);
             return 'Veterinario y usuario eliminados exitosamente';

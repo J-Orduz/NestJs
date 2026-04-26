@@ -1,6 +1,7 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Roles } from "../enums/roles.enums";
 import { VeterinarioEntity } from "src/veterinario/entities/vet.entity";
+import { DueñoEntity } from "src/dueño/entities/dueño.entity";
 
 @Entity({name: 'usuarios'})
 export class UsuarioEntity{
@@ -35,4 +36,7 @@ export class UsuarioEntity{
 
     @OneToOne(()=> VeterinarioEntity, (veterinario) => veterinario.usuario)
     veterinario: VeterinarioEntity;
+
+    @OneToOne(()=> DueñoEntity, (dueño)=> dueño.usuario)
+    dueño: DueñoEntity;
 }

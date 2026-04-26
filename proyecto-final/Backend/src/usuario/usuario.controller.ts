@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { UsuarioDTO } from './dtos/usuario.dto';
-import { LoginUsuarioDTO } from './dtos/loginUsuario.dto';
+import { LoginUsuarioDTO } from '../auth/dtos/loginUsuario.dto';
 import { UpdateUsuarioDTO } from './dtos/update.usuario.dto';
 
 @Controller('usuario')
@@ -13,13 +13,6 @@ export class UsuarioController {
     @Body() registrarUsuarioDto: UsuarioDTO
   ){
     return this.usuarioService.registrarUsuario(registrarUsuarioDto);
-  }
-
-  @Post('login')
-  loginUsuario(
-    @Body() loginUsuarioDto: LoginUsuarioDTO
-  ){
-    return this.usuarioService.loginUsuario(loginUsuarioDto);
   }
 
   @Patch(':id')
