@@ -19,7 +19,7 @@ export class VeterinarioService {
         try{
             const usuario = await this.usuarioService.obtenerUsuarioId(usuarioId);
             if(!usuario){
-                throw new Error('Usuario no encontrado');
+                return 'Usuario no encontrado';
             }
 
             await this.usuarioService.actualizarRolUsuario(usuarioId, Roles.VETERINARIO);
@@ -41,7 +41,7 @@ export class VeterinarioService {
     async obtenerVeterinarios(){
         const veterinarios = await this.veterinarioRepository.find({relations:['usuario']})
         if(veterinarios.length === 0){
-            throw new error('No hay veterinarios registrados');
+            return 'No hay veterinarios registrados';
         }
 
         return veterinarios;
@@ -53,7 +53,7 @@ export class VeterinarioService {
             relations:['usuario']
         });
         if(!veterinario){
-            throw new error(`No se encontró al veterinario con id: ${id}`);
+            return `No se encontró al veterinario con id: ${id}`;
         }
         return veterinario;
     }
@@ -65,7 +65,7 @@ export class VeterinarioService {
         });
 
         if (!veterinario) {
-            throw new NotFoundException(`No se encontró al veterinario con id: ${id}`);
+            return `No se encontró al veterinario con id: ${id}`;
         }
 
         if (datos.nombre_completo || datos.correo || datos.contrasenia) {
@@ -86,7 +86,7 @@ export class VeterinarioService {
             relations:['usuario']
         })
         if(!veterinario){
-            throw new NotFoundException(`No se encontró al veterinario con id: ${id}`);
+            return `No se encontró al veterinario con id: ${id}`;
         }
         try{
             const usuarioId = veterinario.usuario.id;

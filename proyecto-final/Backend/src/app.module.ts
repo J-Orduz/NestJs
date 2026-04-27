@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VeterinarioModule } from './veterinario/veterinario.module';
 import { AuthModule } from './auth/auth.module';
 import { DueñoModule } from './dueño/dueño.module';
+import { AdministradorModule } from './administrador/administrador.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { DueñoModule } from './dueño/dueño.module';
     UsuarioModule,
     VeterinarioModule,
     AuthModule,
-    DueñoModule],
+    DueñoModule,
+    AdministradorModule],
   controllers: [],
   providers: [],
 })

@@ -20,7 +20,7 @@ export class DueñoService {
             const user = await this.usuarioService.obtenerUsuarioId(usuarioId)
 
             if(!user){
-                throw new NotFoundException('Usuario no encontrado');
+                return 'Usuario no encontrado';
             }
 
             await this.usuarioService.actualizarRolUsuario(usuarioId, Roles.DUEÑO)
@@ -46,7 +46,7 @@ export class DueñoService {
             })
 
             if(!dueño){
-                throw new NotFoundException('No se encontró al dueño con id: '+id);
+                return 'No se encontró al dueño con id: '+id;
             }
 
             return dueño;
@@ -59,7 +59,7 @@ export class DueñoService {
         try{
             const dueños = await this.dueñoRepository.find({relations: ['usuario']})
             if(dueños.length === 0){
-                throw new NotFoundException('No hay dueños registrados');
+                return 'No hay dueños registrados';
             }
             return dueños;
         }catch(error){
@@ -74,7 +74,7 @@ export class DueñoService {
                 relations: ['usuario']
             })
             if(!dueño){
-                throw new NotFoundException('No se encotró al dueño con id: '+id)
+                return 'No se encotró al dueño con id: '+id
             }
             const usuarioId = dueño.usuario.id;
             await this.dueñoRepository.delete(id);
@@ -93,7 +93,7 @@ export class DueñoService {
             })
 
             if(!dueño){
-                throw new NotFoundException('No se encontró al dueño con id: '+id)
+                return 'No se encontró al dueño con id: '+id
             }
 
             if (datos.nombre_completo || datos.correo || datos.contrasenia) {
