@@ -86,7 +86,7 @@ export class VeterinarioService {
             relations:['usuario']
         })
         if(!veterinario){
-            return `No se encontró al veterinario con id: ${id}`;
+            return `No se encontró al veterinario con id: ${id}`; 
         }
         try{
             const usuarioId = veterinario.usuario.id;
@@ -94,7 +94,7 @@ export class VeterinarioService {
             await this.usuarioService.eliminarUsuario(usuarioId);
             return 'Veterinario y usuario eliminados exitosamente';
         }catch(error){
-            throw new Error('Error al eliminar el veterinario');
+            return'Error al eliminar el veterinario';
         }
     }
 

@@ -5,14 +5,17 @@ import { Repository } from 'typeorm';
 import { LoginUsuarioDTO } from './dtos/loginUsuario.dto';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from './interfaces/jwtPayload.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        private readonly usuarioService: UsuarioService,
         @InjectRepository(UsuarioEntity)
-        private readonly usuarioRepository: Repository<UsuarioEntity>,
+        private readonly userRepository: Repository<UsuarioEntity>,
+        private readonly usuarioService: UsuarioService,
+        private readonly jwtService: JwtService
     ){}
 
     async loginUsuario(loginUsuarioDto: LoginUsuarioDTO){
@@ -21,9 +24,28 @@ export class AuthService {
             const usuarioEncontrado = await this.usuarioService.findUsuario(correo)
     
             if(bcrypt.compareSync(contrasenia, usuarioEncontrado.contrasenia)){
-                return 'Acceso concedido';
+                return {
+                    user: {
+                        correo: usuarioEncontrado.correo,
+                        id: usuarioEncontrado.id
+                    },
+                    token: this.getJwtToken({
+                        correo: usuarioEncontrado.correo,
+                        id: usuarioEncontrado.id
+                    })
+                }
             }
             return 'Acceso denegado';
     
-        }
+    }
+
+    private getJwtToken(payload: JwtPayload){
+        return this.jwtService.sign(payload);
+    }
+
+    async encontrarUsuario(term:string){
+        const usuario = this.usuarioService.findUsuario(term)
+        
+        return usuario;
+    }
 }

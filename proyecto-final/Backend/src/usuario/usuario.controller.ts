@@ -3,6 +3,8 @@ import { UsuarioService } from './usuario.service';
 import { UsuarioDTO } from './dtos/usuario.dto';
 import { LoginUsuarioDTO } from '../auth/dtos/loginUsuario.dto';
 import { UpdateUsuarioDTO } from './dtos/update.usuario.dto';
+import { Auth } from 'src/auth/decorators/Auth.decorator';
+import { Roles } from './enums/roles.enums';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -24,6 +26,7 @@ export class UsuarioController {
   }
 
   @Delete(':id')
+  @Auth(Roles.ADMINISTRADOR)
   deleteUsuario(
     @Param('id', ParseUUIDPipe) id: string
   ){
@@ -31,6 +34,7 @@ export class UsuarioController {
   }
 
   @Get()
+  @Auth(Roles.ADMINISTRADOR)
   obtenerusuarios(){
     return this.usuarioService.obtenerUsuarios()
   }

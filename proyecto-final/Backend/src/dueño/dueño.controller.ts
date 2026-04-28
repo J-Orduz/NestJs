@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from
 import { DueñoService } from './dueño.service';
 import { DueñoDTO } from './dtos/dueño.dto';
 import { UpdateUsuarioDTO } from 'src/usuario/dtos/update.usuario.dto';
+import { Auth } from 'src/auth/decorators/Auth.decorator';
+import { Roles } from 'src/usuario/enums/roles.enums';
 
 @Controller('duenio')
 export class DueñoController {
   constructor(private readonly dueñoService: DueñoService) {}
 
   @Post()
+  @Auth(Roles.ADMINISTRADOR, Roles.USUARIO)
   async registrarDueño(
     @Body() dueñoDto: DueñoDTO
   ){
@@ -23,11 +26,13 @@ export class DueñoController {
   }
 
   @Get()
+  @Auth(Roles.ADMINISTRADOR)
   async obtenerDueños(){
     return this.dueñoService.obtenerDueños();
   }
 
   @Delete(':id')
+  @Auth(Roles.ADMINISTRADOR)
   async eliminarDueño(
     @Param('id', ParseUUIDPipe) id:string
   ){
@@ -35,6 +40,7 @@ export class DueñoController {
   }
 
   @Patch(':id')
+  @Auth(Roles.DUEÑO, Roles.ADMINISTRADOR)
   async modificarDueño(
     @Param('id', ParseUUIDPipe) id:string,
     @Body() data:{direccion_residencia: string, usuario: UpdateUsuarioDTO}

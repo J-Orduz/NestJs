@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post } from
 import { VeterinarioService } from './veterinario.service';
 import { VeterinarioDTO } from './dtos/veterinario.dto';
 import { UpdateUsuarioDTO } from 'src/usuario/dtos/update.usuario.dto';
+import { Auth } from 'src/auth/decorators/Auth.decorator';
+import { Roles } from 'src/usuario/enums/roles.enums';
 
 @Controller('veterinario')
 export class VeterinarioController {
   constructor(private readonly veterinarioService: VeterinarioService) {}
 
   @Post()
+  @Auth(Roles.ADMINISTRADOR)
   registrarVeterinario(
     @Body() veterinarioDto: VeterinarioDTO
   ){
@@ -15,6 +18,7 @@ export class VeterinarioController {
   }
 
   @Get()
+  @Auth(Roles.DUEÑO, Roles.ADMINISTRADOR)
   obtenerVeterinarios(){
     return this.veterinarioService.obtenerVeterinarios();
   }
@@ -27,6 +31,7 @@ export class VeterinarioController {
   }
 
   @Patch(':id')
+  @Auth(Roles.ADMINISTRADOR, Roles.VETERINARIO)
   actualizarVeterinario(
     @Param('id', ParseUUIDPipe) id:string,
     @Body() data: { especialidad_medica: string, usuario: UpdateUsuarioDTO }
@@ -35,6 +40,7 @@ export class VeterinarioController {
   }
 
   @Delete(':id')
+  @Auth(Roles.ADMINISTRADOR)
   eliminarVeterinario(
     @Param('id', ParseUUIDPipe) id:string
   ){
