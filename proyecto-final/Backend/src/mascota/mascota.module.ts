@@ -14,5 +14,6 @@ import { DueñoModule } from 'src/dueño/dueño.module';
         ],
   controllers: [MascotaController],
   providers: [MascotaService],
+  exports: [MascotaService]
 })
 export class MascotaModule {}

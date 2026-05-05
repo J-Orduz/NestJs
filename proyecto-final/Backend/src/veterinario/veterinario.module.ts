@@ -14,5 +14,6 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
     ],
   controllers: [VeterinarioController],
   providers: [VeterinarioService],
+  exports: [VeterinarioService]
 })
 export class VeterinarioModule {}

@@ -1,5 +1,6 @@
+import { CitaMedicaEntity } from "src/cita-medica/entities/cita-medica.entity";
 import { DueñoEntity } from "src/dueño/entities/dueño.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'mascotas'})
 export class MascotaEntity{
@@ -31,4 +32,10 @@ export class MascotaEntity{
     )
     @JoinColumn({name: 'fk_duenio'})
     dueño: DueñoEntity;
+
+    @OneToMany(
+        () => CitaMedicaEntity,
+        (cita) => cita.id,
+    )
+    citas: CitaMedicaEntity[];
 }

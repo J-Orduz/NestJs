@@ -1,5 +1,6 @@
+import { CitaMedicaEntity } from "src/cita-medica/entities/cita-medica.entity";
 import { UsuarioEntity } from "src/usuario/entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'veterinarios'})
 export class VeterinarioEntity{
@@ -15,4 +16,10 @@ export class VeterinarioEntity{
     @OneToOne(()=> UsuarioEntity)
     @JoinColumn({name: 'fk_usuario'})
     usuario: UsuarioEntity;
+
+    @OneToMany(
+        () => CitaMedicaEntity,
+        (cita) => cita.id
+    )
+    citas: CitaMedicaEntity[]
 }

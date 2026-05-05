@@ -1,3 +1,4 @@
+import { CitaMedicaEntity } from "src/cita-medica/entities/cita-medica.entity";
 import { MascotaEntity } from "src/mascota/entities/mascota.entity";
 import { UsuarioEntity } from "src/usuario/entities/user.entity";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
