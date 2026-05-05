@@ -6,6 +6,8 @@ import { VeterinarioModule } from './veterinario/veterinario.module';
 import { AuthModule } from './auth/auth.module';
 import { DueñoModule } from './dueño/dueño.module';
 import { AdministradorModule } from './administrador/administrador.module';
+import { CitaMedicaModule } from './cita-medica/cita-medica.module';
+import { MascotaModule } from './mascota/mascota.module';
 
 @Module({
   imports: [
@@ -24,7 +26,9 @@ import { AdministradorModule } from './administrador/administrador.module';
     VeterinarioModule,
     AuthModule,
     DueñoModule,
-    AdministradorModule],
+    AdministradorModule,
+    CitaMedicaModule,
+    MascotaModule],
   controllers: [],
   providers: [],
 })

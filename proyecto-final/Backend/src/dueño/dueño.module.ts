@@ -16,5 +16,6 @@ import { AuthModule } from 'src/auth/auth.module';
       ],
   controllers: [DueñoController],
   providers: [DueñoService],
+  exports: [DueñoService]
 })
 export class DueñoModule {}

@@ -1,5 +1,6 @@
+import { MascotaEntity } from "src/mascota/entities/mascota.entity";
 import { UsuarioEntity } from "src/usuario/entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'dueños'})
 export class DueñoEntity{
@@ -15,4 +16,13 @@ export class DueñoEntity{
     @OneToOne(()=> UsuarioEntity)
     @JoinColumn({name: 'fk_usuario'})
     usuario: UsuarioEntity;
+
+    @OneToMany(
+        () => MascotaEntity,
+        (mascota) => mascota.id,
+        {
+            cascade:true
+        }
+    )
+    mascotas: MascotaEntity[]
 }
