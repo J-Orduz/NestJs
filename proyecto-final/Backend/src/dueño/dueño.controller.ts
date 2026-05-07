@@ -26,7 +26,7 @@ export class DueñoController {
   }
 
   @Get()
-  @Auth(Roles.ADMINISTRADOR)
+  @Auth(Roles.ADMINISTRADOR, Roles.VETERINARIO)
   async obtenerDueños(){
     return this.dueñoService.obtenerDueños();
   }
