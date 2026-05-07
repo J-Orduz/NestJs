@@ -102,6 +102,24 @@ export const duenioService = {
     const response = await api.patch(`/duenio/${dueñoId}`, data);
     return response.data;
   },
+  crearDueño: async (data: {
+    direccion_residencia: string;
+    usuario: string;
+  }): Promise<any> => {
+    const response = await api.post('/duenio', data);
+    return response.data;
+  },
+};
+
+export const usuarioService = {
+  registrar: async (data: {
+    nombre_completo: string;
+    correo: string;
+    contrasenia: string;
+  }): Promise<{ id: string; message: string }> => {
+    const response = await api.post('/usuario/registrar', data);
+    return response.data;
+  },
 };
 
 export const adminService = {
