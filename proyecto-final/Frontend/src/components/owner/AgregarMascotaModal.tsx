@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mascotaService } from '../../services/api';
+import { mascotaService, duenioService } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
 interface AgregarMascotaModalProps {
@@ -20,27 +20,26 @@ const AgregarMascotaModal: React.FC<AgregarMascotaModalProps> = ({ onClose, onMa
     raza: '',
   });
 
-  // Obtener el dueñoId desde las mascotas existentes del usuario
   useEffect(() => {
     const fetchDueñoId = async () => {
       if (!user?.id) return;
       
       try {
-        const mascotas = await mascotaService.obtenerMascotas();
-        // Buscar una mascota que pertenezca al usuario actual
-        const mascotaDelUsuario = mascotas.find(
-          (m) => m.dueño.usuario.id === user.id
-        );
+        const dueño = await duenioService.obtenerDueñoPorUsuario(user.id);
         
-        if (mascotaDelUsuario) {
-          setDueñoId(mascotaDelUsuario.dueño.id);
-          console.log('Dueño ID encontrado desde mascotas:', mascotaDelUsuario.dueño.id);
+        if (dueño && dueño.id) {
+          setDueñoId(dueño.id);
+          console.log('Dueño ID encontrado:', dueño.id);
         } else {
           setError('No se encontró un registro de dueño. Contacta al administrador.');
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error al obtener el dueño:', err);
-        setError('Error al cargar la información del dueño');
+        if (err.response?.status === 404) {
+          setError('No se encontró un registro de dueño para este usuario. Contacta al administrador.');
+        } else {
+          setError('Error al cargar la información del dueño');
+        }
       } finally {
         setLoadingDueño(false);
       }
@@ -67,7 +66,7 @@ const AgregarMascotaModal: React.FC<AgregarMascotaModalProps> = ({ onClose, onMa
         nombre: formData.nombre,
         especie: formData.especie,
         raza: formData.raza,
-        dueño: dueñoId,  // Usar el ID del dueño obtenido desde las mascotas
+        dueño: dueñoId,
       });
       onMascotaAgregada();
       onClose();

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import type { Mascota, Veterinario } from '../../types';
-import { citaService, mascotaService, veterinarioService } from '../../services/api';
+import { citaService, mascotaService, veterinarioService, duenioService } from '../../services/api';
 
 interface AgendarCitaModalProps {
   onClose: () => void;
@@ -8,6 +9,7 @@ interface AgendarCitaModalProps {
 }
 
 const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCreada }) => {
+  const { user } = useAuth();
   const [mascotas, setMascotas] = useState<Mascota[]>([]);
   const [veterinarios, setVeterinarios] = useState<Veterinario[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,12 +26,30 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!user?.id) return;
+      
       try {
-        const [mascotasData, veterinariosData] = await Promise.all([
-          mascotaService.obtenerMascotas(),
-          veterinarioService.obtenerVeterinarios(),
-        ]);
-        setMascotas(mascotasData);
+        setLoading(true);
+        
+        // Primero, obtener el dueñoId
+        const dueño = await duenioService.obtenerDueñoPorUsuario(user.id);
+        const dueñoIdObtenido = dueño?.id;
+        
+        if (!dueñoIdObtenido) {
+          setError('No se encontró un registro de dueño');
+          setLoading(false);
+          return;
+        }
+        
+        // Obtener todas las mascotas y filtrar por dueñoId
+        const todasMascotas = await mascotaService.obtenerMascotas();
+        const misMascotas = todasMascotas.filter(
+          (m) => m.dueño.id === dueñoIdObtenido
+        );
+        
+        const veterinariosData = await veterinarioService.obtenerVeterinarios();
+        
+        setMascotas(misMascotas);
         setVeterinarios(veterinariosData);
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -38,8 +58,9 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
         setLoading(false);
       }
     };
+    
     fetchData();
-  }, []);
+  }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,12 +140,21 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
             >
               <option value="">Selecciona una mascota</option>
-              {mascotas.map((mascota) => (
-                <option key={mascota.id} value={mascota.id}>
-                  {mascota.nombre} - {mascota.especie} ({mascota.raza})
-                </option>
-              ))}
+              {mascotas.length === 0 ? (
+                <option value="" disabled>No tienes mascotas registradas</option>
+              ) : (
+                mascotas.map((mascota) => (
+                  <option key={mascota.id} value={mascota.id}>
+                    {mascota.nombre} - {mascota.especie} ({mascota.raza})
+                  </option>
+                ))
+              )}
             </select>
+            {mascotas.length === 0 && (
+              <p className="text-xs text-red-500 mt-1">
+                No tienes mascotas registradas. Agrega una mascota primero.
+              </p>
+            )}
           </div>
 
           <div>
@@ -136,7 +166,8 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
               value={formData.veterinarioId}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+              disabled={mascotas.length === 0}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
             >
               <option value="">Selecciona un veterinario</option>
               {veterinarios.map((veterinario) => (
@@ -159,7 +190,8 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
                 onChange={handleChange}
                 min={minDate}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                disabled={mascotas.length === 0}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
               />
             </div>
             <div>
@@ -171,7 +203,8 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
                 value={formData.hora}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                disabled={mascotas.length === 0}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
                 {horas.map((hora) => (
                   <option key={hora} value={hora}>
@@ -191,8 +224,9 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
               value={formData.motivo_consulta}
               onChange={handleChange}
               required
+              disabled={mascotas.length === 0}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
               placeholder="Describe el motivo de la consulta..."
             />
           </div>
@@ -213,7 +247,7 @@ const AgendarCitaModal: React.FC<AgendarCitaModalProps> = ({ onClose, onCitaCrea
             </button>
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || mascotas.length === 0}
               className="flex-1 bg-primary text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {submitting ? 'Agendando...' : 'Agendar Cita'}

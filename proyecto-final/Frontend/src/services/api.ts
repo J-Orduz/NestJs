@@ -85,6 +85,10 @@ export const veterinarioService = {
 };
 
 export const duenioService = {
+  obtenerDueñoPorUsuario: async (usuarioId: string): Promise<any> => {
+    const response = await api.get(`/duenio/usuario/${usuarioId}`);
+    return response.data;
+  },
   obtenerDueñoActual: async (dueñoId: string): Promise<any> => {
     const response = await api.get(`/duenio/${dueñoId}`);
     return response.data;
