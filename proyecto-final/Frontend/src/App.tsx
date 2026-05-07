@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import OwnerDashboard from './components/owner/OwnerDashboard';
+import AdminDashboard from './components/admin/AdminDashboard';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
@@ -41,6 +42,14 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['administrador']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/" element={<Navigate to="/login" />} />
     </Routes>
   );
@@ -49,9 +58,9 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+       <AuthProvider>
+         <AppRoutes />
+       </AuthProvider>
     </BrowserRouter>
   );
 }

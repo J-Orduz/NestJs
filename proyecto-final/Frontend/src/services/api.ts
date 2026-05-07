@@ -100,4 +100,80 @@ export const duenioService = {
   },
 };
 
+export const adminService = {
+  // Usuarios 
+  crearUsuario: async (data: {
+    nombre_completo: string;
+    correo: string;
+    contrasenia: string;
+  }): Promise<{ id: string; message: string }> => {
+    const response = await api.post('/usuario/registrar', data);
+    return response.data; 
+  },
+
+  // Administradores
+  crearAdministrador: async (data: { usuario: string }): Promise<any> => {
+    const response = await api.post('/administrador', data);
+    return response.data;
+  },
+  obtenerAdministradores: async (): Promise<any[]> => {
+    const response = await api.get('/administrador');
+    return response.data;
+  },
+  actualizarAdministrador: async (id: string, data: Partial<{
+    nombre_completo: string;
+    correo: string;
+    contrasenia: string;
+  }>): Promise<any> => {
+    const response = await api.patch(`/administrador/${id}`, data);
+    return response.data;
+  },
+  eliminarAdministrador: async (id: string): Promise<void> => {
+    await api.delete(`/administrador/${id}`);
+  },
+
+  // Veterinarios
+  crearVeterinario: async (data: {
+    especialidad_medica: string;
+    usuario: string;
+  }): Promise<any> => {
+    const response = await api.post('/veterinario', data);
+    return response.data;
+  },
+  obtenerVeterinarios: async (): Promise<any[]> => {
+    const response = await api.get('/veterinario');
+    return response.data;
+  },
+  actualizarVeterinario: async (id: string, data: Partial<{
+    nombre_completo: string;
+    correo: string;
+    contrasenia: string;
+    especialidad_medica: string;
+  }>): Promise<any> => {
+    const response = await api.patch(`/veterinario/${id}`, data);
+    return response.data;
+  },
+  eliminarVeterinario: async (id: string): Promise<void> => {
+    await api.delete(`/veterinario/${id}`);
+  },
+
+  // Dueños
+  obtenerDueños: async (): Promise<any[]> => {
+    const response = await api.get('/duenio');
+    return response.data;
+  },
+  actualizarDueño: async (id: string, data: Partial<{
+    nombre_completo: string;
+    correo: string;
+    contrasenia: string;
+    direccion_residencia: string;
+  }>): Promise<any> => {
+    const response = await api.patch(`/duenio/${id}`, data);
+    return response.data;
+  },
+  eliminarDueño: async (id: string): Promise<void> => {
+    await api.delete(`/duenio/${id}`);
+  },
+};
+
 export default api;

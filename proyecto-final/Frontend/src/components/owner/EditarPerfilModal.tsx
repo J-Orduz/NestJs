@@ -73,7 +73,7 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({ dueñoId, onClose
     }
 
     try {
-      const response = await duenioService.actualizarDueño(dueñoId, updateData);
+      await duenioService.actualizarDueño(dueñoId, updateData);
       
       // Si se actualizó el nombre o correo, actualizar el contexto
       if (updateData.nombre_completo || updateData.correo) {
