@@ -100,11 +100,10 @@ export class DueñoService {
                 await this.usuarioService.modificarUsuario(datos, dueño.usuario.id);
             }
 
-            if (datos.direecion) {
-                dueño.direccion_residencia = datos.direccion;
+            if (datos.direccion_residencia) {
+                dueño.direccion_residencia = datos.direccion_residencia;
                 await this.dueñoRepository.save(dueño)
             }
-
             return 'Dueño modificado correctamente'
         }catch(error){
             return 'Error al modificar el dueño'
