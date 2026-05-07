@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import api, { citaService, mascotaService } from '../../services/api';
+import { citaService, mascotaService } from '../../services/api';
 import type { CitaMedica, Mascota } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import CitaDetalleModal from './CitaDetalleModal';
@@ -8,6 +8,7 @@ import AgendarCitaModal from './AgendarCitaModal';
 import AgregarMascotaModal from './AgregarMascotaModal';
 import EditarMascotaModal from './EditarMascotaModal';
 import EliminarMascotaModal from './EliminarMascotaModal';
+import EditarPerfilModal from './EditarPerfilModal';
 
 const OwnerDashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -21,6 +22,8 @@ const OwnerDashboard: React.FC = () => {
   const [selectedMascota, setSelectedMascota] = useState<Mascota | null>(null);
   const [showEditarMascota, setShowEditarMascota] = useState(false);
   const [showEliminarMascota, setShowEliminarMascota] = useState(false);
+  const [showEditarPerfil, setShowEditarPerfil] = useState(false);
+  const [dueñoId, setDueñoId] = useState<string | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -48,8 +51,38 @@ const OwnerDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [user?.id]);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [citasData, mascotasData] = await Promise.all([
+        citaService.obtenerCitas(),
+        mascotaService.obtenerMascotas(),
+      ]);
+      
+      const misMascotas = mascotasData.filter(
+        (m) => m.dueño.usuario.id === user?.id
+      );
+      setMascotas(misMascotas);
+      
+      // Guardar el dueñoId
+      if (misMascotas.length > 0 && !dueñoId) {
+        setDueñoId(misMascotas[0].dueño.id);
+      }
+      
+      const misMascotasIds = new Set(misMascotas.map((m) => m.id));
+      const misCitas = citasData.filter((c) =>
+        misMascotasIds.has(c.mascota.id)
+      );
+      setCitas(misCitas);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  fetchData();
+}, [user?.id, dueñoId]);
 
   const handleLogout = () => {
     logout();
@@ -87,6 +120,13 @@ const OwnerDashboard: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center space-x-3">
+                <button
+                 onClick={() => setShowEditarPerfil(true)}
+                    className="flex items-center space-x-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition"
+                    >
+                    <span>👤</span>
+                    <span>Mi Perfil</span>
+              </button>
               <button
                 onClick={() => setShowAgendarModal(true)}
                 className="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition"
@@ -359,6 +399,14 @@ const OwnerDashboard: React.FC = () => {
             setSelectedMascota(null);
           }}
           onMascotaEliminada={fetchData}
+        />
+      )}
+
+      {showEditarPerfil && dueñoId && (
+        <EditarPerfilModal
+            dueñoId={dueñoId}
+            onClose={() => setShowEditarPerfil(false)}
+            onPerfilActualizado={fetchData}
         />
       )}
     </div>

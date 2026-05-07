@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { LoginResponse, CitaMedica, Mascota, Veterinario } from '../types';
+import type { LoginResponse, CitaMedica, Mascota, Veterinario, Usuario } from '../types';
 
 const API_BASE_URL = 'http://localhost:3000/api/vet';
 
@@ -77,16 +77,25 @@ export const mascotaService = {
   },
 };
 
-export const dueñoService = {
-  obtenerDueñoPorUsuario: async (usuarioId: string): Promise<any> => {
-    const response = await api.get(`/usuarios/${usuarioId}/dueno`);
+export const veterinarioService = {
+  obtenerVeterinarios: async (): Promise<Veterinario[]> => {
+    const response = await api.get('/veterinario');
     return response.data;
   },
 };
 
-export const veterinarioService = {
-  obtenerVeterinarios: async (): Promise<Veterinario[]> => {
-    const response = await api.get('/veterinario');
+export const duenioService = {
+  obtenerDueñoActual: async (dueñoId: string): Promise<any> => {
+    const response = await api.get(`/duenio/${dueñoId}`);
+    return response.data;
+  },
+  actualizarDueño: async (dueñoId: string, data: {
+    nombre_completo?: string;
+    correo?: string;
+    contrasenia?: string;
+    direccion_residencia?: string;
+  }): Promise<any> => {
+    const response = await api.patch(`/duenio/${dueñoId}`, data);
     return response.data;
   },
 };
