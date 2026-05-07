@@ -48,4 +48,9 @@ export class DueñoController {
     return this.dueñoService.modificarDueño(id, data);
   }
 
+  @Get('usuario/:usuarioId')
+  async getDueñoByUsuario(@Param('usuarioId') usuarioId: string) {
+    return this.dueñoService.findByUsuario(usuarioId);
+  }
+
 }

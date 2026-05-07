@@ -109,4 +109,11 @@ export class DueñoService {
             return 'Error al modificar el dueño'
         }
     }
+
+    async findByUsuario(usuarioId: string) {
+        return this.dueñoRepository.findOne({
+            where: { usuario: { id: usuarioId } },
+            relations: ['usuario']
+        });
+    }
 }
