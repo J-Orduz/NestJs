@@ -8,7 +8,7 @@ export class CitaMedicaEntity{
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column('date',{
+    @Column('timestamp',{
         nullable: false
     })
     fecha_cita: string;
