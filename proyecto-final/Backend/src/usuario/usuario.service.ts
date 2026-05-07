@@ -29,7 +29,9 @@ export class UsuarioService {
         })
         try{
             await this.usuarioRepository.save(usuario);
+            const newUsuario = await this.findUsuario(usuario.correo);
             return{
+                id: newUsuario.id,
                 message: 'Usuario registrado exitosamente'
             }
         }catch(error){

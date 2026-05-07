@@ -72,8 +72,8 @@ export class VeterinarioService {
             await this.usuarioService.modificarUsuario(datos, veterinario.usuario.id);
         }
 
-        if (datos.especialidad) {
-            veterinario.especialidad_medica = datos.especialidad;
+        if (datos.especialidad_medica) {
+            veterinario.especialidad_medica = datos.especialidad_medica;
             await this.veterinarioRepository.save(veterinario);
         }
 
