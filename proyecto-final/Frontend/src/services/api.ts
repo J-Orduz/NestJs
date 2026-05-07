@@ -55,6 +55,33 @@ export const mascotaService = {
     const response = await api.get('/mascota');
     return response.data;
   },
+  crearMascota: async (data: {
+    nombre: string;
+    especie: string;
+    raza: string;
+    dueño: string;
+  }): Promise<Mascota> => {
+    const response = await api.post('/mascota', data);
+    return response.data;
+  },
+  actualizarMascota: async (id: string, data: Partial<{
+    nombre: string;
+    especie: string;
+    raza: string;
+  }>): Promise<Mascota> => {
+    const response = await api.patch(`/mascota/${id}`, data);
+    return response.data;
+  },
+  eliminarMascota: async (id: string): Promise<void> => {
+    await api.delete(`/mascota/${id}`);
+  },
+};
+
+export const dueñoService = {
+  obtenerDueñoPorUsuario: async (usuarioId: string): Promise<any> => {
+    const response = await api.get(`/usuarios/${usuarioId}/dueno`);
+    return response.data;
+  },
 };
 
 export const veterinarioService = {
