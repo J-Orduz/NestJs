@@ -68,9 +68,10 @@ CREATE DATABASE nombre_tu_bd;
 
 ## Uso del proyecto
 
-### Ejecutar en modo desarrollo
+### Ejecutar en el backend modo desarrollo
 
 ```bash
+cd backend
 npm run start:dev
 ```
 
