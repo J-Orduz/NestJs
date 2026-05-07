@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { LoginResponse, CitaMedica, Mascota, Veterinario, Usuario } from '../types';
+import type { LoginResponse, CitaMedica, Mascota, Veterinario } from '../types';
 
 const API_BASE_URL = 'http://localhost:3000/api/vet';
 
@@ -177,6 +177,37 @@ export const adminService = {
   },
   eliminarDueño: async (id: string): Promise<void> => {
     await api.delete(`/duenio/${id}`);
+  },
+};
+
+export const vetService = {
+  // Obtener citas del veterinario autenticado
+  obtenerMisCitas: async (): Promise<CitaMedica[]> => {
+    const response = await api.get('/cita-medica');
+    return response.data;
+  },
+  
+  // Obtener todos los dueños (para asignar mascotas)
+  obtenerDueños: async (): Promise<any[]> => {
+    const response = await api.get('/duenio');
+    return response.data;
+  },
+  
+  // Actualizar perfil del veterinario
+  actualizarPerfil: async (veterinarioId: string, data: {
+    nombre_completo?: string;
+    correo?: string;
+    contrasenia?: string;
+    especialidad_medica?: string;
+  }): Promise<any> => {
+    const response = await api.patch(`/veterinario/${veterinarioId}`, data);
+    return response.data;
+  },
+  
+  // Obtener veterinario actual
+  obtenerVeterinarioActual: async (): Promise<any> => {
+    const response = await api.get('/veterinario/actual');
+    return response.data;
   },
 };
 

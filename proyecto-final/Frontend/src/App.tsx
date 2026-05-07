@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import OwnerDashboard from './components/owner/OwnerDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
+import VetDashboard from './components/vet/VetDashboard';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
@@ -51,6 +52,14 @@ function AppRoutes() {
         }
       />
       <Route path="/" element={<Navigate to="/login" />} />
+      <Route
+        path="/vet/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['veterinario']}>
+            <VetDashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

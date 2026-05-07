@@ -358,11 +358,12 @@ const OwnerDashboard: React.FC = () => {
 
       {/* Modales */}
       {selectedCita && (
-        <CitaDetalleModal
-          cita={selectedCita}
-          onClose={() => setSelectedCita(null)}
-          onCitaActualizada={fetchData}
-        />
+      <CitaDetalleModal
+        cita={selectedCita}
+        onClose={() => setSelectedCita(null)}
+        onCitaActualizada={fetchData}
+        showActions={true} 
+      />
       )}
 
       {showAgendarModal && (

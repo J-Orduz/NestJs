@@ -7,18 +7,19 @@ interface CitaDetalleModalProps {
   cita: CitaMedica;
   onClose: () => void;
   onCitaActualizada: () => void;
+  showActions?: boolean;
 }
 
 const CitaDetalleModal: React.FC<CitaDetalleModalProps> = ({ 
   cita, 
   onClose, 
-  onCitaActualizada 
+  onCitaActualizada,
+  showActions = true 
 }) => {
   const [showEditar, setShowEditar] = useState(false);
   const [showEliminar, setShowEliminar] = useState(false);
 
   const formatFecha = (fechaStr: string) => {
-    // Si viene en formato "YYYY-MM-DD HH:MM:SS"
     if (fechaStr.includes(' ')) {
       const [fecha, hora] = fechaStr.split(' ');
       const [year, month, day] = fecha.split('-');
@@ -35,7 +36,6 @@ const CitaDetalleModal: React.FC<CitaDetalleModalProps> = ({
       };
     }
     
-    // Si viene en formato ISO
     const fecha = new Date(fechaStr);
     return {
       fecha: fecha.toLocaleDateString('es-ES', {
@@ -78,6 +78,9 @@ const CitaDetalleModal: React.FC<CitaDetalleModalProps> = ({
                 <p className="text-sm text-gray-600">
                   {cita.mascota.especie} - {cita.mascota.raza}
                 </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Dueño: {cita.mascota.dueño.usuario.nombre_completo}
+                </p>
               </div>
             </div>
 
@@ -111,25 +114,28 @@ const CitaDetalleModal: React.FC<CitaDetalleModalProps> = ({
               </div>
             </div>
 
-            <div className="flex space-x-3 pt-2">
-              <button
-                onClick={() => setShowEditar(true)}
-                className="flex-1 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition font-medium"
-              >
-                ✏️ Editar
-              </button>
-              <button
-                onClick={() => setShowEliminar(true)}
-                className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition font-medium"
-              >
-                🗑️ Eliminar
-              </button>
-            </div>
+            {/* Botones de acciones - solo se muestran si showActions es true */}
+            {showActions && (
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => setShowEditar(true)}
+                  className="flex-1 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition font-medium"
+                >
+                  ✏️ Editar
+                </button>
+                <button
+                  onClick={() => setShowEliminar(true)}
+                  className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition font-medium"
+                >
+                  🗑️ Eliminar
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {showEditar && (
+      {showActions && showEditar && (
         <EditarCitaModal
           cita={cita}
           onClose={() => setShowEditar(false)}
@@ -140,7 +146,7 @@ const CitaDetalleModal: React.FC<CitaDetalleModalProps> = ({
         />
       )}
 
-      {showEliminar && (
+      {showActions && showEliminar && (
         <EliminarCitaModal
           citaId={cita.id}
           mascotaNombre={cita.mascota.nombre}
