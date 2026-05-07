@@ -5,10 +5,21 @@
 Este proyecto es una aplicación backend desarrollada con **NestJS** que proporciona un sistema integral de gestión de usuarios, veterinarios, dueños, mascotas y citas. Permite realizar operaciones CRUD completas sobre estos recursos, incluyendo autenticación segura de usuarios.
 
 ### Tecnologías principales:
+**Backend:**
 - **Framework**: NestJS
 - **Lenguaje**: TypeScript
 - **Base de Datos**: PostgreSQL
-- **Node.js**: v18+
+- **ORM**: TypeORM
+- **Autenticación**: JWT + Passport
+- **Encripción**: Bcrypt
+
+**Frontend:**
+- **Framework**: React 18
+- **Lenguaje**: TypeScript
+- **Estilos**: TailwindCSS 3
+- **Cliente HTTP**: Axios
+- **Routing**: React Router DOM
+- **Iconos**: SVG personalizados
 
 ## Requisitos previos
 
@@ -20,10 +31,11 @@ Antes de utilizar el proyecto, asegúrate de tener instalado:
 - Un gestor de variables de entorno (archivo `.env`)
 
 ## Configuración e instalación
-
+### Backend
 ### 1. Instalar dependencias
 
 ```bash
+cd backend
 npm install
 ```
 
@@ -41,6 +53,9 @@ DATABASE_NAME=nombre_tu_bd
 
 # Puerto de la aplicación
 PORT=3000
+
+# JWT Secret
+JWT_SECRET=tu_secreto_jwt_aqui
 ```
 
 ### 3. Crear la base de datos
@@ -61,6 +76,19 @@ npm run start:dev
 
 El servidor se iniciará en `http://localhost:3000` (o el puerto especificado en `.env`)
 
+### Frontend
+### Instalar dependencias
+```bash
+cd Frontend
+npm install
+```
+
+### Iniciar Frontend
+```bash
+npm run dev
+```
+
+El servidor frontend se iniciará en `http://localhost:5173`
 
 ## Endpoints principales
 
